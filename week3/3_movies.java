@@ -16,6 +16,8 @@ public class MoviesDatabase {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
+        
+
         try {
             // Establish the connection
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
