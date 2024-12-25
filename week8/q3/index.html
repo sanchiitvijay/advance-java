@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+</head>
+<body>
+    <h2>Scientific Calculator</h2>
+    <form action="calculator.jsp" method="post">
+        <label for="number">Enter a number:</label>
+        <input type="text" id="number" name="number" required><br><br>
+
+        <label for="operation">Select operation:</label>
+        <select id="operation" name="operation" required>
+            <option value="sin">Sin</option>
+            <option value="cos">Cos</option>
+            <option value="tan">Tan</option>
+            <option value="log">Log</option>
+            <option value="root">Square Root</option>
+        </select><br><br>
+
+        <input type="submit" value="Calculate">
+    </form>
+</body>
+</html>
