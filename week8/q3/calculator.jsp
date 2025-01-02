@@ -1,72 +1,87 @@
-<%@ page import="java.io.*,java.util.*" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"%>
-<%@ page errorPage="errorPage.jsp" %>
-<%
-    // Retrieve the number and selected operation from the request
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="java.lang.Math" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Scientific Calculator</title>
+</head>
+<body>
+
+<h2>Scientific Calculator</h2>
+<form action="calculator.jsp" method="post">
+    <label for="number">Enter Number:</label>
+    <input type="number" id="number" name="number" step="any" required>
+
+    <label for="operation">Select Operation:</label>
+    <select id="operation" name="operation" required>
+        <option value="">Select...</option>
+        <option value="sin">Sin</option>
+        <option value="cos">Cos</option>
+        <option value="tan">Tan</option>
+        <option value="log">Log</option>
+        <option value="sqrt">Square Root</option>
+    </select>
+
+    <input type="submit" value="Calculate">
+</form>
+
+<% 
     String numberStr = request.getParameter("number");
     String operation = request.getParameter("operation");
-    double number = 0;
-    boolean validInput = true;
-    String message = "";
-    
-    try {
-        // Validate and parse the number
-        if (numberStr != null && !numberStr.isEmpty()) {
-            number = Double.parseDouble(numberStr);
-        } else {
-            validInput = false;
-            message = "Please enter a valid number.";
-        }
+    double result = 0;
+    boolean showResult = false;
+    String errorMessage = "";
 
-        // Perform the operation based on the user's choice
-        if (validInput) {
-            switch (operation) {
-                case "sin":
-                    message = "Sin(" + number + ") = " + Math.sin(Math.toRadians(number));
-                    break;
-                case "cos":
-                    message = "Cos(" + number + ") = " + Math.cos(Math.toRadians(number));
-                    break;
-                case "tan":
-                    message = "Tan(" + number + ") = " + Math.tan(Math.toRadians(number));
-                    break;
-                case "log":
-                    if (number <= 0) {
-                        message = "Logarithm is undefined for zero or negative values.";
-                    } else {
-                        message = "Log(" + number + ") = " + Math.log(number);
-                    }
-                    break;
-                case "root":
-                    if (number < 0) {
-                        message = "Square root is undefined for negative values.";
-                    } else {
-                        message = "Square Root of " + number + " = " + Math.sqrt(number);
-                    }
-                    break;
-                default:
-                    message = "Invalid operation.";
+    if (numberStr != null && !numberStr.isEmpty() && operation != null && !operation.isEmpty()) {
+        try {
+            double number = Double.parseDouble(numberStr);
+            
+            if (operation.equals("sin")) {
+                result = Math.sin(Math.toRadians(number)); // Convert to radians
+                showResult = true;
+            } else if (operation.equals("cos")) {
+                result = Math.cos(Math.toRadians(number)); // Convert to radians
+                showResult = true;
+            } else if (operation.equals("tan")) {
+                result = Math.tan(Math.toRadians(number)); // Convert to radians
+                showResult = true;
+            } else if (operation.equals("log")) {
+                if (number <= 0) {
+                    errorMessage = "Logarithm is undefined for zero or negative numbers.";
+                } else {
+                    result = Math.log(number); // Natural log
+                    showResult = true;
+                }
+            } else if (operation.equals("sqrt")) {
+                if (number < 0) {
+                    errorMessage = "Square root is undefined for negative numbers.";
+                } else {
+                    result = Math.sqrt(number); // Square root
+                    showResult = true;
+                }
             }
+        } catch (NumberFormatException e) {
+            errorMessage = "Please enter a valid number.";
         }
-    } catch (NumberFormatException e) {
-        validInput = false;
-        message = "Please enter a valid number.";
+    }
+
+    if (showResult) {
+%>
+        <div class="result">
+            <h3>Result:</h3>
+            <p>The result of <strong><%= operation %></strong> for <%= numberStr %> is: <%= result %></p>
+        </div>
+<%  
+    } else if (!errorMessage.isEmpty()) {
+%>
+        <div class="error">
+            <h3>Error:</h3>
+            <p><%= errorMessage %></p>
+        </div>
+<%  
     }
 %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scientific Calculator Result</title>
-</head>
-<body>
-    <h2>Calculator Result</h2>
-
-    <p><%= message %></p>
-
-    <br><br>
-    <a href="index.html">Go back to the calculator</a>
 </body>
 </html>
